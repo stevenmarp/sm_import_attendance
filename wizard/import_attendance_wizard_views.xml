@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_import_attendance_wizard_form" model="ir.ui.view">
+        <field name="name">sm.import.attendance.wizard.form</field>
+        <field name="model">sm.import.attendance.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Attendances">
+                <group>
+                    <field name="file_type" widget="radio" options="{'horizontal': True}"/>
+                    <field name="import_file" filename="file_name"
+                           required="not download_sample"/>
+                    <field name="file_name" invisible="1"/>
+                    <field name="has_header"/>
+                </group>
+                <group>
+                    <field name="download_sample"/>
+                    <field name="sample_type" invisible="not download_sample"
+                           required="download_sample"/>
+                    <field name="sample_file" filename="sample_file_name" readonly="1"
+                           invisible="not sample_file"/>
+                    <field name="sample_file_name" invisible="1"/>
+                </group>
+                <div class="text-muted">
+                    <p>
+                        Import attendances from CSV or Excel with three columns:
+                        <b>Employee Name</b>, <b>Sign In</b>, and <b>Sign Out</b>.
+                    </p>
+                    <p>
+                        Dates are read in the employee or user timezone. Example:
+                        <b>2026-07-27 08:00:00</b>.
+                    </p>
+                    <p>
+                        Nothing is saved if any row has an error, so you can fix the file
+                        and import it again safely.
+                    </p>
+                </div>
+                <footer>
+                    <button name="action_import" string="Import" type="object"
+                            class="btn-primary" invisible="download_sample"/>
+                    <button name="action_download_sample" string="Download Sample File"
+                            type="object" class="btn-secondary" invisible="not download_sample"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_import_attendance_wizard" model="ir.actions.act_window">
+        <field name="name">Import Attendances</field>
+        <field name="res_model">sm.import.attendance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sm_import_attendance"
+              name="Import Attendances"
+              parent="hr_attendance.menu_hr_attendance_root"
+              action="action_import_attendance_wizard"
+              groups="hr_attendance.group_hr_attendance_officer"
+              sequence="8"/>
+
+</odoo>
